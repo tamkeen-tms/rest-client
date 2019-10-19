@@ -1,4 +1,5 @@
 {
+  "name": "tamkeen/rest-client",
   "require": {
     "guzzlehttp/guzzle": "~6.0"
   },
