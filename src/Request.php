@@ -10,7 +10,7 @@
 	 */
 	class Request{
 		/**
-		 * @var \Tamkeen\ApiClient\Client
+		 * @var Client
 		 */
 		public $client;
 		/**
@@ -35,11 +35,9 @@
 		public $options = [];
 
 		/**
-		 * Request constructor.
-		 *
-		 * @param \Tamkeen\ApiClient\Client $client The Api client this request will be executed through
-		 * @param                           $method The method e.g GET, POST, PUT, ...
-		 * @param                           $path The url endpoint path
+		 * @param Client                    $client The Api client this request will be executed through
+		 * @param                           $method string The method e.g GET, POST, PUT, ...
+		 * @param                           $path string url endpoint path
 		 * @param array                     $query [optional] The url query string params
 		 * @param array                     $data [optional] Any data to pass along with the request
 		 * @param array                     $options [optional] Options for the GuzzleHttp client
@@ -136,10 +134,15 @@
 			return $this;
 		}
 
-		/**
-		 * @return mixed
-		 */
-		public function send(){
+        /**
+         * Sends the request to the API server
+         * @return mixed
+         * @throws ApiErrorException When there is an error in the API itself
+         * @throws InvalidPathException When the path you specified was not found (404)
+         * @throws LimitReachedException When the requests limit is reached
+         * @throws RequestException When an error occurs with the request itself, mainly from the Guzzle library.
+         */
+        public function send(){
 			try{
 				// The client
 				$request = new \GuzzleHttp\Client([

@@ -1,10 +1,11 @@
 <?php namespace Tamkeen;
 
 	/**
-	 * @package Tamkeen\ApiClient
+	 * @package Tamkeen
 	 */
 	class Client{
 		/**
+         * The API base url
 		 * @var string
 		 */
 		private $baseUrl;
@@ -78,15 +79,16 @@
 		}
 
 		/**
-		 * @param $type
+         * Creates a new request
+		 * @param $method
 		 * @param $path
 		 * @param $query
 		 * @param $data
 		 * @param $options
 		 *
-		 * @return \Tamkeen\ApiClient\Request
+		 * @return Request
 		 */
-		public function request($type, $path, array $query = [], array $data = [], array $options = []){
-			return new Request($this, $type, $path, $query, $data, $options);
+		public function request($method, $path, array $query = [], array $data = [], array $options = []){
+			return new Request($this, $method, $path, $query, $data, $options);
 		}
 	}
