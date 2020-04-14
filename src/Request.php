@@ -11,22 +11,27 @@
          * @var Client
          */
         public $client;
+
         /**
          * @var string
          */
         public $method;
+
         /**
          * @var string
          */
         public $path;
+
         /**
          * @var array
          */
         public $query = [];
+
         /**
          * @var array
          */
         public $data = [];
+
         /**
          * @var array
          */
@@ -160,12 +165,10 @@
                 $this->query['key'] = $this->client->getApiKey();
 
                 // Options
-                $options = array_merge([
-                    'verify' => false,
+                $options = array_merge($this->client->getRequestOptions(), $this->options, [
                     'query' => $this->query,
                     'form_params' => $this->data
-
-                ], $this->options);
+                ]);
 
                 // The url
                 $path = 'api/v' . $this->client->getApiVersion() . '/' . $this->path;

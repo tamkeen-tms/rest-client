@@ -10,15 +10,23 @@
          * @var string
          */
         private $baseUrl;
+
         /**
          * @var string
          */
         private $apiKey;
+
         /**
          * The API's version
          * @var int
          */
         private $apiVersion = 1;
+
+        /**
+         * @var array
+         */
+        private $requestOptions = [];
+
         /**
          * The default locale for the data fetched by the Api
          * @var string
@@ -26,9 +34,23 @@
         private $defaultLocale = 'en';
 
         /**
+         * Client constructor.
+         * @param null $baseUrl
+         * @param null $key
+         * @param array $options
          */
-        public function __construct()
+        public function __construct($baseUrl = null, $key = null, array $options = [])
         {
+            if($baseUrl){
+                $this->setBaseUrl($baseUrl);
+            }
+
+            if($key){
+                $this->setApiKey($key);
+            }
+
+            // The default request options
+            $this->setRequestsOptions($options);
         }
 
         /**
@@ -53,6 +75,25 @@
             $this->apiKey = $key;
 
             return $this;
+        }
+
+        /**
+         * @param array $options
+         * @return $this
+         */
+        public function setRequestsOptions(array $options)
+        {
+            $this->requestOptions = $options;
+
+            return $this;
+        }
+
+        /**
+         * @return array
+         */
+        public function getRequestOptions()
+        {
+            return $this->requestOptions;
         }
 
         /**
