@@ -6,10 +6,9 @@
     class Client
     {
         /**
-         * The API base url
          * @var string
          */
-        private $baseUrl;
+        private $tenantId;
 
         /**
          * @var string
@@ -33,20 +32,22 @@
          */
         private $defaultLocale = 'en';
 
+	    /**
+         * The API base url
+         */
+        const BASE_URI = 'https://tamkeentms.com/';
+
         /**
-         * Client constructor.
-         * @param null $baseUrl
-         * @param null $key
+         * @param null $tenantId
+         * @param null $apiKey
          * @param array $options
          */
-        public function __construct($baseUrl = null, $key = null, array $options = [])
+        public function __construct($tenantId, $apiKey = null, array $options = [])
         {
-            if($baseUrl){
-                $this->setBaseUrl($baseUrl);
-            }
+            $this->setTenantId($tenantId);
 
-            if($key){
-                $this->setApiKey($key);
+            if($apiKey){
+                $this->setApiKey($apiKey);
             }
 
             // The default request options
@@ -54,13 +55,13 @@
         }
 
         /**
-         * @param $url
+         * @param $tenantId
          *
          * @return $this
          */
-        public function setBaseUrl($url)
+        public function setTenantId($tenantId)
         {
-            $this->baseUrl = rtrim($url, '/') . '/';
+            $this->tenantId = $tenantId;
 
             return $this;
         }
@@ -112,9 +113,9 @@
         /**
          * @return string
          */
-        public function getBaseUrl()
+        public function getTenantId()
         {
-            return $this->baseUrl;
+            return $this->tenantId;
         }
 
         /**

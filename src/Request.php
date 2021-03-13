@@ -158,11 +158,8 @@
             try {
                 // The client
                 $request = new \GuzzleHttp\Client([
-                    'base_uri' => $this->client->getBaseUrl()
+                    'base_uri' => Client::BASE_URI
                 ]);
-
-                // Add the API Key to the request
-                $this->query['key'] = $this->client->getApiKey();
 
                 // Options
                 $options = array_merge($this->client->getRequestOptions(), $this->options, [
@@ -174,7 +171,12 @@
                 $path = 'api/v' . $this->client->getApiVersion() . '/' . $this->path;
 
                 // Send the request
-                $response = $request->request($this->method, $path, $options);
+                $response = $request->request($this->method, $path, $options, [
+                    'headers' => [
+                        'X-Tenant' => $this->client->getTenantId(),
+                        'Authorization' => "Bearer " . $this->client->getApiKey()
+                    ]
+                ]);
 
                 // Decode the response
                 $responseBody = @json_decode((string) $response->getBody());

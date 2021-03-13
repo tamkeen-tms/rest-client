@@ -6,7 +6,7 @@ This is the official PHP client for Tamkeen's REST API. You can use this in your
 ## Installation
 You can require this library into your project using `composer`, using the following command:
 ```shell
-composer install TamkeenLMS/rest-client
+composer install tamkeen-tms/rest-client
 ```
 Later you can use it in your project through the namespace `Tamkeen`
 
@@ -14,12 +14,12 @@ Later you can use it in your project through the namespace `Tamkeen`
 This library merely sends requests to Tamkeen's API endpoints. So, you need to know what endpoints are available and how to pick the correct one! A list of the endpoints are available on Tamkeen's website.
 
 ### Creating a client
-Before sending requests you need to initiate a new "Client" instance, and pass it the API base url and key. Through this client you will be able to make the requests. Each "Request" must be made through a "Client". You can instantiate multiple clients to make requests to multiple copies of the application! 
+Before sending requests you need to initiate a new "Client" instance, and pass it the "Tenant Id" and authorization key. Through this client you will be able to make the requests. Each "Request" must be made through a "Client". You can instantiate multiple clients to make requests to multiple copies of the application! 
 ```PHP
 $client = new Tamkeen\Client // New client instance
 	
-$client->setBaseUrl( ... ) // Base url, to the Tamkeen url e.g https://example.com/
-    ->setApiKey( ... ) // The API key
+$client->setTenantId( ... ) // The tenant id
+    ->setApiKey( ... ) // The API authorization key
 ```
 ### Sending a request
 Using the created client you can send new requests, for example:
@@ -32,11 +32,6 @@ You need to call `->send()`, which will send the request to the application and 
 ## Examples:
 Here is an example for fetching the branches list:
 ```PHP
-$client = new Tamkeen\Client;
-
-$client->setBaseUrl('https://example.com')
-    ->setApiKey(' ... ');
-
 try{
     $request = $client->request('get', 'branches'); // Create the request
     $response = $request->send(); // Send it, returns the response
