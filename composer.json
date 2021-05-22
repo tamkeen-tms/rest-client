@@ -1,5 +1,5 @@
 {
-  "name": "tamkeenlms/rest-client",
+  "name": "tamkeen-tms/rest-client",
   "description": "PHP REST client for Tamkeen's API (tamkeentms.com)",
   "type": "library",
   "keywords": ["REST", "API", "PHP", "LMS"],
@@ -10,7 +10,7 @@
     "homepage": "https://tamkeentms.com"
   }],
   "require": {
-    "guzzlehttp/guzzle": "~6.0"
+    "guzzlehttp/guzzle": "^6.0"
   },
 
   "autoload": {
