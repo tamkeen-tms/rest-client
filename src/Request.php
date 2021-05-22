@@ -175,7 +175,7 @@
                 $response = $request->request($this->method, 'api/v' . $this->client->getVersion() . '/' . $this->path, $options);
 
                 // Decode the response
-                $responseBody = @json_decode((string) $response->getBody(), true);
+                $responseBody = @json_decode((string) $response->getBody());
 
                 // If the response isn't json
                 if(json_last_error() !== JSON_ERROR_NONE){
