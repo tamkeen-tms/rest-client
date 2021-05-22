@@ -13,11 +13,11 @@
         /**
          * The API is not currently active
          */
-        const EXCEPTION_API_NOT_ACTIVE = 'api_not_active';
+        const EXCEPTION_API_DISABLED = 'api_disabled';
         /**
-         * Authentication failed. The key is not valid.
+         * Authentication failed. The key is either missing or invalid
          */
-        const EXCEPTION_AUTH_FAILED = 'auth_failed';
+        const EXCEPTION_MISSING_OR_INVALID_KEY = 'missing_or_invalid_key';
         /**
          * The requests limit reached
          */

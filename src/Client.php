@@ -6,64 +6,93 @@
     class Client
     {
         /**
+         * The tenant's id
          * @var string
          */
-        private $tenantId;
+        public $tenant;
 
         /**
+         * Auth secret key. Available at Administration / API.
          * @var string
          */
-        private $apiKey;
+        private $key;
 
         /**
          * The API's version
          * @var int
          */
-        private $apiVersion = 1;
+        protected $version = 1;
+
+        /**
+         * The API base url to Tamkeen API
+         */
+        public $baseUrl = 'https://tamkeenapp.com/';
 
         /**
          * @var array
          */
-        private $requestOptions = [];
+        protected $requestOptions = [];
 
         /**
          * The default locale for the data fetched by the Api
          * @var string
          */
-        private $defaultLocale = 'en';
-
-	    /**
-         * The API base url
-         */
-        const BASE_URI = 'https://tamkeentms.com/';
+        public $defaultLocale = 'en';
 
         /**
-         * @param null $tenantId
-         * @param null $apiKey
+         * @param null $tenant
+         * @param null $key
          * @param array $options
          */
-        public function __construct($tenantId, $apiKey = null, array $options = [])
+        public function __construct($tenant, $key = null, array $options = [])
         {
-            $this->setTenantId($tenantId);
+            // Set the tenant's id
+            $this->setTenant($tenant);
 
-            if($apiKey){
-                $this->setApiKey($apiKey);
+            if($key){
+                $this->setKey($key);
             }
 
             // The default request options
             $this->setRequestsOptions($options);
         }
 
-        /**
-         * @param $tenantId
+	    /**
+         * @param $baseUrl
          *
          * @return $this
          */
-        public function setTenantId($tenantId)
-        {
-            $this->tenantId = $tenantId;
+        public function setBaseUrl($baseUrl){
+            $this->baseUrl = $baseUrl;
 
             return $this;
+        }
+
+	    /**
+         * @return string
+         */
+        public function getBaseUrl(){
+            return $this->baseUrl;
+        }
+
+        /**
+         * @param $tenant
+         *
+         * @return $this
+         */
+        public function setTenant($tenant)
+        {
+            $this->tenant = $tenant;
+
+            return $this;
+        }
+
+        /**
+         * @return string
+         */
+        public function getTenant()
+        {
+            return $this->tenant;
         }
 
         /**
@@ -71,11 +100,40 @@
          *
          * @return $this
          */
-        public function setApiKey($key)
+        public function setKey($key)
         {
-            $this->apiKey = $key;
+            $this->key = $key;
 
             return $this;
+        }
+
+        /**
+         * @return string
+         */
+        public function getKey()
+        {
+            return $this->key;
+        }
+
+        /**
+         * Set the API version
+         * @param $version
+         *
+         * @return $this
+         */
+        public function setVersion($version)
+        {
+            $this->version = $version;
+
+            return $this;
+        }
+
+        /**
+         * @return int
+         */
+        public function getVersion()
+        {
+            return $this->version;
         }
 
         /**
@@ -95,43 +153,6 @@
         public function getRequestOptions()
         {
             return $this->requestOptions;
-        }
-
-        /**
-         * Set the API version
-         * @param $version
-         *
-         * @return $this
-         */
-        public function setApiVersion($version)
-        {
-            $this->apiVersion = $version;
-
-            return $this;
-        }
-
-        /**
-         * @return string
-         */
-        public function getTenantId()
-        {
-            return $this->tenantId;
-        }
-
-        /**
-         * @return string
-         */
-        public function getApiKey()
-        {
-            return $this->apiKey;
-        }
-
-        /**
-         * @return int
-         */
-        public function getApiVersion()
-        {
-            return $this->apiVersion;
         }
 
         /**

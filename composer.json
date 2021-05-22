@@ -2,7 +2,8 @@
   "name": "tamkeen-tms/rest-client",
   "description": "PHP REST client for Tamkeen's API (tamkeentms.com)",
   "type": "library",
-  "keywords": ["REST", "API", "PHP", "LMS"],
+  "license": "MIT",
+  "keywords": ["REST", "API", "PHP", "LMS", "TMS"],
   "homepage": "https://tamkeentms.com",
   "authors": [{
     "name": "Tamkeen Team",

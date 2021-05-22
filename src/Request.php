@@ -158,28 +158,24 @@
             try {
                 // The client
                 $request = new \GuzzleHttp\Client([
-                    'base_uri' => Client::BASE_URI
+                    'base_uri' => $this->client->getBaseUrl()
                 ]);
 
                 // Options
                 $options = array_merge($this->client->getRequestOptions(), $this->options, [
                     'query' => $this->query,
-                    'form_params' => $this->data
-                ]);
-
-                // The url
-                $path = 'api/v' . $this->client->getApiVersion() . '/' . $this->path;
-
-                // Send the request
-                $response = $request->request($this->method, $path, $options, [
+                    'form_params' => $this->data,
                     'headers' => [
-                        'X-Tenant' => $this->client->getTenantId(),
-                        'Authorization' => "Bearer " . $this->client->getApiKey()
+                        'Tenant' => $this->client->getTenant(),
+                        'Authorization' => "Bearer " . $this->client->getKey()
                     ]
                 ]);
 
+                // Send the request
+                $response = $request->request($this->method, 'api/v' . $this->client->getVersion() . '/' . $this->path, $options);
+
                 // Decode the response
-                $responseBody = @json_decode((string) $response->getBody());
+                $responseBody = @json_decode((string) $response->getBody(), true);
 
                 // If the response isn't json
                 if(json_last_error() !== JSON_ERROR_NONE){
@@ -189,26 +185,27 @@
                 return $responseBody;
 
             } catch (\Exception $exception) {
-                if($exception instanceof \GuzzleHttp\Exception\RequestException){
+                // Guzzle Request Exception?
+                if($exception instanceof \GuzzleHttp\Exception\RequestException && $exception->getResponse() !== null){
                     switch ($exception->getResponse()->getStatusCode()) {
+                        case 500:
+                            throw new RequestException(RequestException::EXCEPTION_API_ERROR);
+                            break;
+
                         case 503:
-                            throw new RequestException(RequestException::EXCEPTION_API_NOT_ACTIVE);
+                            throw new RequestException(RequestException::EXCEPTION_API_DISABLED);
                             break;
 
                         case 401:
-                            throw new RequestException(RequestException::EXCEPTION_AUTH_FAILED);
-                            break;
-
-                        case 429:
-                            throw new RequestException(RequestException::EXCEPTION_LIMIT_REACHED);
+                            throw new RequestException(RequestException::EXCEPTION_MISSING_OR_INVALID_KEY);
                             break;
 
                         case 404:
                             throw new RequestException(RequestException::EXCEPTION_INVALID_PATH);
                             break;
 
-                        case 500:
-                            throw new RequestException(RequestException::EXCEPTION_API_ERROR);
+                        case 429:
+                            throw new RequestException(RequestException::EXCEPTION_LIMIT_REACHED);
                             break;
                     }
 
