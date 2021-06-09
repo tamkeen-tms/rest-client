@@ -1,8 +1,8 @@
 <?php namespace Tamkeen;
 
-    use Tamkeen\Exceptions\RequestException;
+use GuzzleHttp\Exception\RequestException;
 
-    /**
+/**
      * @package Tamkeen\ApiClient
      */
     class Request
@@ -151,7 +151,7 @@
         /**
          * Sends the request to the API server
          * @return mixed
-         * @throws RequestException
+         * @throws \Exception
          */
         public function send()
         {
@@ -166,7 +166,7 @@
                     'query' => $this->query,
                     'form_params' => $this->data,
                     'headers' => [
-                        'Tenant' => $this->client->getTenant(),
+                        'X-Tenant' => $this->client->getTenant(),
                         'Authorization' => "Bearer " . $this->client->getKey()
                     ]
                 ]);
@@ -179,41 +179,23 @@
 
                 // If the response isn't json
                 if(json_last_error() !== JSON_ERROR_NONE){
-                    throw new RequestException(RequestException::EXCEPTION_API_ERROR);
+                    throw new \Exception('api_error');
                 }
 
                 return $responseBody;
 
-            } catch (\Exception $exception) {
+            } catch (\Exception $e) {
                 // Guzzle Request Exception?
-                if($exception instanceof \GuzzleHttp\Exception\RequestException && $exception->getResponse() !== null){
-                    switch ($exception->getResponse()->getStatusCode()) {
-                        case 500:
-                            throw new RequestException(RequestException::EXCEPTION_API_ERROR);
-                            break;
+                if($e instanceof RequestException && $e->getResponse() !== null){
+                    // Decode the error
+                    $response = @json_decode( (string) $e->getResponse()->getBody(), true );
 
-                        case 503:
-                            throw new RequestException(RequestException::EXCEPTION_API_DISABLED);
-                            break;
-
-                        case 401:
-                            throw new RequestException(RequestException::EXCEPTION_MISSING_OR_INVALID_KEY);
-                            break;
-
-                        case 404:
-                            throw new RequestException(RequestException::EXCEPTION_INVALID_PATH);
-                            break;
-
-                        case 429:
-                            throw new RequestException(RequestException::EXCEPTION_LIMIT_REACHED);
-                            break;
+                    if(isset($response['error'])){
+                        throw new \Exception($response['error']);
                     }
-
-                }elseif($exception instanceof RequestException){
-                    throw $exception;
                 }
 
-                throw new RequestException(RequestException::EXCEPTION_REQUEST_ERROR);
+                throw $e;
             }
         }
     }

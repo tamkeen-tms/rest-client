@@ -2,7 +2,7 @@
 
 ## What is this?
 This is the official PHP client for Tamkeen's REST API. You can use this in your PHP applications to communicate with Tamkeen. 
-Before you start you need to acquire an the "Tenant id" and the secret "key"; you can find this info under Administration > API.
+Before you start you need to acquire an the "Tenant id" and the secret auth "key"; you can find this info under Administration > API.
 
 ## Installation
 You can require this library into your project using `composer`, via the following command:
@@ -37,15 +37,12 @@ try{
 
 }catch(RequestException $e){
     /**
-    * Calling $e->getMessage() returns one of these messages:
-    * 
-    * request_error: Error while creating/sending the request.
-    * api_disabled: The API interface is disabled on Tamkeen's end, and needs to be enabled.
-    * missing_or_invalid_key: Authentication failed; key missing or invalide
-    * api_error: An error happened on the API's end.
-    *
-    * limit_reached: Reached the limit on the number of API requests, configured in Tamkeen.
-    * invalid_path: The endpoint requested was not found.
+    * Possible error messages include:
+    * tenant_not_identified: The tenant id was not provided, or invalid
+    * api_disabled: API is disabled for the tenant. (Contact the support team to enable it).
+    * api_key_missing: The authentication key missing.
+    * api_key_invalid: The authentication key is invalid.
+    * api_error: An error happened at the API's level; server error (500).
     **/
 }
 ```
@@ -55,7 +52,8 @@ The `$response` in this case would return:
 {
     "branches": [{
         "id": 1,
-        "name": "HQ",
+        "name": "Headquarters",
+        "code": "HQ"
         "currency": "USD"
     }]
 }
